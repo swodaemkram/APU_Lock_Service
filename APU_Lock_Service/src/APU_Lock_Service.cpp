@@ -122,27 +122,43 @@ if (my_serial.good() )
                 my_serial.SetFlowControl(SerialStreamBuf::FLOW_CONTROL_NONE);
                 my_serial.SetParity(SerialStreamBuf::PARITY_NONE);
                 my_serial.SetNumOfStopBits(1);
+                printf("Serial Port Connected\n");
+                sprintf(log_message,"Connected to Serial Port");
+                log_Function(log_message);
+                memset(log_message,0,250);
             }
+if (! my_serial.good())
+{
+	printf("Serial Port Not Found !\n");
+	sprintf(log_message,"Serial Port NOT FOUND !");
+	log_Function(log_message);
+	memset(log_message,0,250);
+	SignalHandler(1);
+}
+
 /*
 ======================================================================================================================
 End of Comm Port Setup
 ======================================================================================================================
+Start of APU_Lock Service
+======================================================================================================================
+*/
+while(1) //Service so endless loop
+{
+
+
+
+
+
+
+
+}
+/*
+======================================================================================================================
+End of APU_Lock Service
+======================================================================================================================
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	SignalHandler(1);
+    SignalHandler(1);
 	return 0;
 }
