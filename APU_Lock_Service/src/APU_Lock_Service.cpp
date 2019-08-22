@@ -11,7 +11,7 @@
 
 
 using namespace std;
-
+using namespace LibSerial;
 
 
 int main(int argc, char *argv[])
@@ -75,16 +75,16 @@ end of run once check
 */
 
 char log_message[250] = {};
-sprintf(log_message,"================================================\n");
+sprintf(log_message,"================================================");
 log_Function(log_message);
 memset(log_message,0,250);
 sprintf(log_message,"APU Lock Service started using the %s",comm_port);
 log_Function(log_message);
 memset(log_message,0,250);
-sprintf(log_message,"Ver 01.88.00\n");
+sprintf(log_message,"Ver 01.88.00");
 log_Function(log_message);
 memset(log_message,0,250);
-sprintf(log_message,"================================================\n");
+sprintf(log_message,"================================================");
 log_Function(log_message);
 memset(log_message,0,250);
 signal(SIGTERM,SignalHandler);
@@ -112,7 +112,7 @@ const char  str_perr[6] = "PERR;";
 const char  str_OpenPar[3] = ")";
 string etime="10";      // lock open time in seconds
 
-//SerialStream my_serial;
+SerialStream my_serial;
 
 
 
