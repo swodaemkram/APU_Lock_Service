@@ -94,7 +94,8 @@ signal(SIGTERM,SignalHandler);
 Setup Comm Port Here
 ======================================================================================================================
 */
-string portname="/dev/ttyACM0";
+//string portname="/dev/ttyACM0";
+
 char terminator=';';
 char send_char='k';
 string lock_serial="none";
@@ -113,21 +114,15 @@ const char  str_OpenPar[3] = ")";
 string etime="10";      // lock open time in seconds
 
 SerialStream my_serial;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+my_serial.Open(comm_port);
+if (my_serial.good() )
+            {
+                my_serial.SetBaudRate(SerialStreamBuf::BAUD_115200);
+                my_serial.SetCharSize(SerialStreamBuf::CHAR_SIZE_8);
+                my_serial.SetFlowControl(SerialStreamBuf::FLOW_CONTROL_NONE);
+                my_serial.SetParity(SerialStreamBuf::PARITY_NONE);
+                my_serial.SetNumOfStopBits(1);
+            }
 /*
 ======================================================================================================================
 End of Comm Port Setup
@@ -148,6 +143,6 @@ End of Comm Port Setup
 
 
 
-
+	SignalHandler(1);
 	return 0;
 }
