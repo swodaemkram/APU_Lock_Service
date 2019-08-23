@@ -25,6 +25,7 @@
 #include <array>            // for array copy
 
 
+using namespace std;
 /*
 =========================================================================================================
 All Available Functions
@@ -33,6 +34,8 @@ All Available Functions
 
 void log_Function(char *log_message); //provides logging service for APU_Lock_Service
 void SignalHandler(int signum);
+string GetResponse();
+void mssleep(int micros);
 
 /*
 =========================================================================================================
