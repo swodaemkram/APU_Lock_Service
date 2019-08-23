@@ -36,7 +36,9 @@ void log_Function(char *log_message); //provides logging service for APU_Lock_Se
 void SignalHandler(int signum);
 string GetResponse();
 void mssleep(int micros);
-
+int LockLock(void);
+void SendChar(char ochr);
+void SendString(string str);
 /*
 =========================================================================================================
 End Of Available Functions

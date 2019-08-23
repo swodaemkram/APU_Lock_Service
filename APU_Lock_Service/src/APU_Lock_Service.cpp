@@ -147,8 +147,8 @@ Start of APU_Lock Service
 while(1) //Service so endless loop
 {
 
-
-
+LockLock();
+SignalHandler(1);
 
 
 
@@ -241,7 +241,18 @@ void mssleep(int micros)
 End of mssleep
 =========================================================================================================================
 */
+int LockLock(void)
+{
 
+    string resp;
+    char send_char='D';
+    SendChar(send_char);
+    resp=GetResponse();
+    printf("RESP: %s\n",resp.c_str() );
+    return 1;
+
+
+}
 
 
 
