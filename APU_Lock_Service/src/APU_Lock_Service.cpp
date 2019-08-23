@@ -153,17 +153,17 @@ string lock_voltage;
 
 my_serial.Open(comm_port);
 if (my_serial.good() )
-            {
-                my_serial.SetBaudRate(SerialStreamBuf::BAUD_115200);
-                my_serial.SetCharSize(SerialStreamBuf::CHAR_SIZE_8);
-                my_serial.SetFlowControl(SerialStreamBuf::FLOW_CONTROL_NONE);
-                my_serial.SetParity(SerialStreamBuf::PARITY_NONE);
-                my_serial.SetNumOfStopBits(1);
-                printf("Serial Port Connected\n");
-                sprintf(log_message,"Connected to Serial Port");
-                log_Function(log_message);
-                memset(log_message,0,250);
-            }
+       {
+          my_serial.SetBaudRate(SerialStreamBuf::BAUD_115200);
+          my_serial.SetCharSize(SerialStreamBuf::CHAR_SIZE_8);
+          my_serial.SetFlowControl(SerialStreamBuf::FLOW_CONTROL_NONE);
+          my_serial.SetParity(SerialStreamBuf::PARITY_NONE);
+          my_serial.SetNumOfStopBits(1);
+          printf("Serial Port Connected\n");
+          sprintf(log_message,"Connected to Serial Port");
+          log_Function(log_message);
+          memset(log_message,0,250);
+         }
 if (! my_serial.good())
 {
 	printf("Serial Port Not Found !\n");
@@ -355,68 +355,20 @@ string genkey(string challenge)
         // strip the ";" off the end
         if (challenge.size () > 0)  challenge.resize (challenge.size () - 1);
 
-
-
         printf("Challenge: %s[%d]\n",challenge.c_str(), (int) challenge.size() );
         // convert string to byte array
         char salt[12];
         bzero(salt,12);
 
 
-#ifdef DBPRINT
-        printf("MASTER1: %s\n",master);
-        printf("MASTER1 HEX cpp : ");
-        printhexB(master,CODE_LENGTH);
-        printf("\n");
-#endif
-#ifdef DBPRINTJAVA
-        printf("%s\n",master1hex.c_str() );
-#endif
-
-
         for(int i = 0; i < CODE_LENGTH; i++)
             salt[i] = challenge[i] - 0x30;
-//          salt[i] = challenge[i] & 0xF;
 
-
-
-#ifdef DBPRINT
-        printf("SALT HEX cpp    : ");
-        printhexB(salt,CODE_LENGTH);
-        printf("\n");
-#endif
-#ifdef DBPRINTJAVA
-        printf("%s\n",salthex.c_str() );
-#endif
-
-
-
-        // convert
         for(int i = 0; i < CODE_LENGTH; i++)
             master[i] = master[i] - 0x30;
 
-#ifdef DBPRINT
-        printf("MASTER2 HEX cpp : ");
-        printhexB(master,CODE_LENGTH);
-        printf("\n");
-#endif
-#ifdef DBPRINTJAVA
-        printf("%s\n",master2hex.c_str() );
-#endif
-
         for(int i = 0; i < CODE_LENGTH; i++)
             ctmp[i] = (char) ((salt[i] + master[i]) % 10);
-
-
-
-#ifdef DBPRINT
-        printf("CTMP HEX cpp    : ");
-        printhexB(ctmp,CODE_LENGTH);
-        printf("\n");
-#endif
-#ifdef DBPRINTJAVA
-        printf("%s\n", ctmphex.c_str() );
-#endif
 
         for(int i = 0; i < 5; i++)
         {
@@ -426,31 +378,11 @@ string genkey(string challenge)
             r = ctmp[9];
         }
 
-
-#ifdef DBPRINT
-        printf("CTMP1 HEX cpp   : ");
-        printhexB(ctmp,CODE_LENGTH);
-        printf("\n");
-#endif
-#ifdef DBPRINTJAVA
-        printf("%s\n",ctmp1hex.c_str() );
-#endif
-
         for(int i = 0; i < CODE_LENGTH; i++)
         {
             code[i] = (unsigned char) ('0' + ctmp[i]);
         }
 
-
-#ifdef DBPRINT
-        printf("CODE HEX cpp    : ");
-        printhexB(code,CODE_LENGTH);
-        printf("\n");
-#endif
-
-#ifdef DBPRINTJAVA
-        printf("%s\n",codehex.c_str() );
-#endif
 
         string str;
         for (int i=0; i<CODE_LENGTH; i++)
