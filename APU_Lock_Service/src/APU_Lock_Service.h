@@ -63,10 +63,4 @@ End Of Global Variables
 */
 
 
-
-
-
-
-
-
 #endif /* APU_LOCK_SERVICE_H_ */

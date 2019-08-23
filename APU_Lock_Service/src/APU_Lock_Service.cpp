@@ -360,7 +360,6 @@ string genkey(string challenge)
         char salt[12];
         bzero(salt,12);
 
-
         for(int i = 0; i < CODE_LENGTH; i++)
             salt[i] = challenge[i] - 0x30;
 
@@ -372,7 +371,7 @@ string genkey(string challenge)
 
         for(int i = 0; i < 5; i++)
         {
-            char *x = rot(ctmp, r); // returns addy
+            char *x = rot(ctmp, r);
             for (int i=0; i < CODE_LENGTH; i++)
                 ctmp[i] = x[i];
             r = ctmp[9];
@@ -382,7 +381,6 @@ string genkey(string challenge)
         {
             code[i] = (unsigned char) ('0' + ctmp[i]);
         }
-
 
         string str;
         for (int i=0; i<CODE_LENGTH; i++)
