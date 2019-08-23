@@ -1,10 +1,39 @@
-//============================================================================
+//=================================================================================================================
 // Name        : APU_Lock_Service.cpp
 // Author      : Mark Meadows
 // Version     : 00:00:03
 // Copyright   : Copyright (c) 2019 Mark Meadows
 // Description : APU_Lock_Driver_Service in C++, Ansi-style
-//============================================================================
+//================================================================================================================
+
+/*
+===================================================================================================================
+sensors
+RC0 - bolt sensor
+RC1 - exit sensor
+RC2
+
+ASCENT LOGK
+    S   OK 0 1 1 0  - get sensors OK RC0 RC1 RC2 0;
+    a|n OK 5B156A0A - get serial
+    r   OK 0 0      - get exit sensor + bolt OK RC1 RC0
+    N|A             - set new serial number
+    s   OK 00 t=0;  - get status
+    f               - get firmware version
+    D               - lock (de-energize)
+
+    k   OK 30       - get challenge key
+    generate response and then either P or E as below
+    "P "+info.get("serial")+" "+genkey(s.substring(3)                   // Request boot loader mode
+    "P 5B156A0A " + genkey
+
+    "E "+etime+ " " +genkey - response for challenge key, etime="10"    // energize (unlock lock)
+
+sensors
+element 1 = lock        1=lock open
+element 2 = door
+====================================================================================================================
+*/
 
 #include <iostream>
 #include "APU_Lock_Service.h"
@@ -14,6 +43,11 @@ using namespace std;
 using namespace LibSerial;
 
 SerialStream my_serial;
+
+#define CODE_LENGTH     10
+#define KEY "7578649673"
+
+
 
 int main(int argc, char *argv[])
 
@@ -134,6 +168,7 @@ if (! my_serial.good())
 	sprintf(log_message,"Serial Port NOT FOUND !");
 	log_Function(log_message);
 	memset(log_message,0,250);
+	my_serial.Close();
 	SignalHandler(1);
 }
 
@@ -147,12 +182,11 @@ Start of APU_Lock Service
 while(1) //Service so endless loop
 {
 
-LockLock();
+SendChar('k');
+GetResponse();
+
+my_serial.Close();
 SignalHandler(1);
-
-
-
-
 }
 /*
 ======================================================================================================================
@@ -161,7 +195,8 @@ End of APU_Lock Service
 */
 
     SignalHandler(1);
-	return 0;
+	my_serial.Close();
+    return 0;
 }
 
 /*
@@ -184,7 +219,7 @@ string GetResponse()
     {
         my_serial.get(next_char);
         input_buffer[n++]=next_char;
-        mssleep(1);
+        mssleep(2);
     }
 
 
