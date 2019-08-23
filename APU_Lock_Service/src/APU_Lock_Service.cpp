@@ -47,7 +47,20 @@ SerialStream my_serial;
 #define CODE_LENGTH     10
 #define KEY "7578649673"
 
+string unlock_time="10";      // lock open time in seconds
 
+char master[10][10] ={
+        {1,2,3,4,5,6,7,8,9,0},
+        {3,4,5,6,7,8,9,0,1,2},
+        {6,7,8,9,0,1,2,3,4,5},
+        {9,0,1,2,3,4,5,6,7,8},
+        {4,5,6,7,8,9,0,1,2,3},
+        {7,8,9,0,1,2,3,4,5,6},
+        {8,9,0,1,2,3,4,5,6,7},
+        {0,1,2,3,4,5,6,7,8,9},
+        {2,3,4,5,6,7,8,9,0,1},
+        {5,6,7,8,9,0,1,2,3,4}
+    };
 
 int main(int argc, char *argv[])
 
@@ -131,22 +144,11 @@ Setup Comm Port Here
 */
 //string portname="/dev/ttyACM0";
 
-char terminator=';';
-char send_char='k';
 string lock_serial="none";
 string firmware="none";
-int lock_sensor=-1; // 1
-int door_sensor=-1; // 1 = door open
 string lock_status;
 string lock_type;       // "summit" or "ascent"
 string lock_voltage;
-const char  serialnum[32]  = "UNDEFINED";
-const char  addr[32] = "UNDEFINED";
-const char  str_ok[4] = "OK;";
-const char  str_err[5] = "ERR;";
-const char  str_perr[6] = "PERR;";
-const char  str_OpenPar[3] = ")";
-string etime="10";      // lock open time in seconds
 
 
 my_serial.Open(comm_port);
@@ -182,8 +184,7 @@ Start of APU_Lock Service
 while(1) //Service so endless loop
 {
 
-SendChar('k');
-GetResponse();
+	 UnlockLock();
 
 my_serial.Close();
 SignalHandler(1);
@@ -275,6 +276,8 @@ void mssleep(int micros)
 =========================================================================================================================
 End of mssleep
 =========================================================================================================================
+LockLock
+=========================================================================================================================
 */
 int LockLock(void)
 {
@@ -288,14 +291,198 @@ int LockLock(void)
 
 
 }
+/*
+=========================================================================================================================
+End of LockLock
+=========================================================================================================================
+UnlockLock
+=========================================================================================================================
+*/
+int UnlockLock(void)
+{
+
+    char send_char;
+    string resp;
+    string key;
+    string snd;
+
+    printf("\nUnlocking the lock");
+    send_char='k';
+    printf("\nSending %c\n",send_char);
+    SendChar(send_char);
+    resp=GetResponse();
+
+    printf("Challenge Key: %s\n",  resp.c_str());   //Challenge Key: OK 5715393577;
+
+/*
+        use this section only of the challenge key packet
+        |--------|
+    "OK 9036540674;"
+*/
+    printf("Generating response key\n");
+    key = genkey(resp.substr(3));
+    printf("Response key: %s\n",key.c_str());
+
+
+    snd = "E " +unlock_time+" "+ key +";";
+    printf("Sending:%s\n", snd.c_str() );
+    SendString(snd);
+    mssleep(50);
+    resp = GetResponse();
+    printf("Resp: %s\n", resp.c_str() );
+
+
+	return 0;
+}
+/*
+=========================================================================================================================
+End of Unlock Lock
+=========================================================================================================================
+Generate key from provided challenge code
+=========================================================================================================================
+*/
+
+string genkey(string challenge)
+{
+        unsigned char r = 0;
+
+        char master[] = KEY;    // "7578649673";
+        char ctmp[CODE_LENGTH];                              // = new byte[10];
+        char code[CODE_LENGTH];
+		bzero(ctmp,CODE_LENGTH);
+		bzero(code,CODE_LENGTH);
+
+        // strip the ";" off the end
+        if (challenge.size () > 0)  challenge.resize (challenge.size () - 1);
 
 
 
+        printf("Challenge: %s[%d]\n",challenge.c_str(), (int) challenge.size() );
+        // convert string to byte array
+        char salt[12];
+        bzero(salt,12);
+
+
+#ifdef DBPRINT
+        printf("MASTER1: %s\n",master);
+        printf("MASTER1 HEX cpp : ");
+        printhexB(master,CODE_LENGTH);
+        printf("\n");
+#endif
+#ifdef DBPRINTJAVA
+        printf("%s\n",master1hex.c_str() );
+#endif
+
+
+        for(int i = 0; i < CODE_LENGTH; i++)
+            salt[i] = challenge[i] - 0x30;
+//          salt[i] = challenge[i] & 0xF;
 
 
 
+#ifdef DBPRINT
+        printf("SALT HEX cpp    : ");
+        printhexB(salt,CODE_LENGTH);
+        printf("\n");
+#endif
+#ifdef DBPRINTJAVA
+        printf("%s\n",salthex.c_str() );
+#endif
 
 
+
+        // convert
+        for(int i = 0; i < CODE_LENGTH; i++)
+            master[i] = master[i] - 0x30;
+
+#ifdef DBPRINT
+        printf("MASTER2 HEX cpp : ");
+        printhexB(master,CODE_LENGTH);
+        printf("\n");
+#endif
+#ifdef DBPRINTJAVA
+        printf("%s\n",master2hex.c_str() );
+#endif
+
+        for(int i = 0; i < CODE_LENGTH; i++)
+            ctmp[i] = (char) ((salt[i] + master[i]) % 10);
+
+
+
+#ifdef DBPRINT
+        printf("CTMP HEX cpp    : ");
+        printhexB(ctmp,CODE_LENGTH);
+        printf("\n");
+#endif
+#ifdef DBPRINTJAVA
+        printf("%s\n", ctmphex.c_str() );
+#endif
+
+        for(int i = 0; i < 5; i++)
+        {
+            char *x = rot(ctmp, r); // returns addy
+            for (int i=0; i < CODE_LENGTH; i++)
+                ctmp[i] = x[i];
+            r = ctmp[9];
+        }
+
+
+#ifdef DBPRINT
+        printf("CTMP1 HEX cpp   : ");
+        printhexB(ctmp,CODE_LENGTH);
+        printf("\n");
+#endif
+#ifdef DBPRINTJAVA
+        printf("%s\n",ctmp1hex.c_str() );
+#endif
+
+        for(int i = 0; i < CODE_LENGTH; i++)
+        {
+            code[i] = (unsigned char) ('0' + ctmp[i]);
+        }
+
+
+#ifdef DBPRINT
+        printf("CODE HEX cpp    : ");
+        printhexB(code,CODE_LENGTH);
+        printf("\n");
+#endif
+
+#ifdef DBPRINTJAVA
+        printf("%s\n",codehex.c_str() );
+#endif
+
+        string str;
+        for (int i=0; i<CODE_LENGTH; i++)
+            str += code[i];
+        return str;
+
+}
+
+/*
+=========================================================================================================================
+End Generate key from provided challenge code
+=========================================================================================================================
+rot Function
+=========================================================================================================================
+*/
+
+char* rot(char b[], char seed)
+{
+    char a[10];
+    for (int i=0; i < CODE_LENGTH; i++)
+        a[i]=b[i];
+    b[0] = master[seed][a[0]];
+    for(int i = 1; i < CODE_LENGTH; i++) {
+        b[i] = master[b[i-1]][a[i]];
+    }
+    return &b[0];
+}
+/*
+=========================================================================================================================
+End rot Function
+=========================================================================================================================
+*/
 
 
 

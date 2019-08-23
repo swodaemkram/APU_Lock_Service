@@ -39,6 +39,10 @@ void mssleep(int micros);
 int LockLock(void);
 void SendChar(char ochr);
 void SendString(string str);
+string genkey(string challenge);
+char* rot(char b[], char seed);
+int UnlockLock(void);
+
 /*
 =========================================================================================================
 End Of Available Functions
