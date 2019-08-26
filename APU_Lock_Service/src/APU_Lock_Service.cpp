@@ -47,6 +47,9 @@ SerialStream my_serial;
 #define CODE_LENGTH     10
 #define KEY "7578649673"
 
+extern char MessageFromSocket[1024];
+extern bool Socket_Initialized;
+
 string unlock_time="10";      // lock open time in seconds
 
 char master[10][10] ={
@@ -183,10 +186,31 @@ End of Comm Port Setup
 Start of APU_Lock Service
 ======================================================================================================================
 */
+
+
 while(1) //Service so endless loop
 {
-	domain_socket_service();
+	domain_socket_server();
+//-------------------------------------------------------------------------------------------------------------------
+//Listen for commands
+//-------------------------------------------------------------------------------------------------------------------
+	if(strlen(MessageFromSocket) != 0)
+	{
+		printf("message from Domain socket = %s\n",MessageFromSocket);
+		sprintf(log_message,"Command %s was Received By APU_Lock Service instance %d",MessageFromSocket,procnumber);
+		log_Function(log_message);
+	}
+//-------------------------------------------------------------------------------------------------------------------
+//End of Listen for commands
+//-------------------------------------------------------------------------------------------------------------------
+//Process command
+//-------------------------------------------------------------------------------------------------------------------
+	 process_command();
 
+
+
+
+	 memset(MessageFromSocket,0,1024); //Clear message from Socket
 }
 /*
 ======================================================================================================================
@@ -313,7 +337,7 @@ int UnlockLock(void)
 
     //printf("\nUnlocking the lock");
     memset(log_message,0,250);
-    sprintf(log_message,"Unlock Command Sent to Lock...",resp.c_str());
+    sprintf(log_message,"Unlock Command Sent to Lock...");
     log_Function(log_message);
 
 

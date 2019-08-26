@@ -42,8 +42,8 @@ void SendString(string str);
 string genkey(string challenge);
 char* rot(char b[], char seed);
 int UnlockLock(void);
-void domain_socket_server (void);
-
+void domain_socket_server(void);
+void processcommand(void);
 /*
 =========================================================================================================
 End Of Available Functions

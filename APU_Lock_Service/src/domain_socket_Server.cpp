@@ -22,9 +22,14 @@ char APU_Lock_sock_name[250] = {0};
 
 void log_Function(char *log_message);
 
+bool Socket_Initialized = false;
+char MessageFromSocket[1024] = "";
+
+
 void domain_socket_server (void)
 {
 
+	if(Socket_Initialized) goto RXNOW;
 	int sock, msgsock, rval;
 	struct sockaddr_un server; //Set up structure for socket
 	char buf[1024];				//Buffer
@@ -53,6 +58,15 @@ void domain_socket_server (void)
 		return;
 	}
 
+Socket_Initialized = true;
+return;
+
+
+
+
+
+RXNOW:
+
 	//printf("msgsock = %d\n",msgsock);//debug
     bzero(buf, sizeof(buf));      //Zero out buffer
     rval = read(msgsock, buf, 1024); //Read from the socket
@@ -78,19 +92,20 @@ void domain_socket_server (void)
 	}
 */
 
-	if(strncmp(buf,"reset",5)==0 || strncmp(buf,"verify",6) ==0 || strncmp(buf,"stack",5) ==0 || strncmp(buf,"idle",4) ==0 || strncmp(buf,"appver",6)==0 ||
- strncmp(buf,"bootver",7)==0 || strncmp(buf,"model",5) ==0 || strncmp(buf,"serial",6) == 0 || strncmp(buf,"varname",7)==0|| strncmp(buf,"stop",4)==0)
-    {
-	strcpy(APU_Lock_sock_name,buf);
+	//if(strncmp(buf,"unlock",5)==0 )
+    //{
+	strcpy(MessageFromSocket,buf);
+	memset(buf,0,1025);
 	close(msgsock);
-	close(sock);
-	unlink(APU_Lock_sock_name);
+	//close(sock);
+	//unlink(APU_Lock_sock_name);
+	Socket_Initialized = false;
 	return;
-    }
+    //}
 
-    memset(log_message,0,250);
-    sprintf(log_message,"client sent invalid command");
-    log_Function(log_message);
+    //memset(log_message,0,250);
+    //sprintf(log_message,"client sent invalid command");
+    //log_Function(log_message);
 
  //WORKING HERE///////////////////////////////
 
