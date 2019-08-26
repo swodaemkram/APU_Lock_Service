@@ -185,11 +185,8 @@ Start of APU_Lock Service
 */
 while(1) //Service so endless loop
 {
+	domain_socket_service();
 
-	 UnlockLock();
-
-my_serial.Close();
-SignalHandler(1);
 }
 /*
 ======================================================================================================================

@@ -27,7 +27,7 @@ void log_Function(char *log_message)
 
 
 		mei_service_log = fopen(mei_log_file_name,"a");
-		printf("\nlog_message = %s\n",log_message);
+		//printf("\nlog_message = %s\n",log_message);
      	char *Mytime_fmt = " %s.%09ld ";
 		char MyTime[27];
 		sprintf(MyTime, Mytime_fmt, buff,ts.tv_nsec); //Format and apply data
