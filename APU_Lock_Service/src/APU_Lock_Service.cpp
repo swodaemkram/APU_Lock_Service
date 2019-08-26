@@ -62,6 +62,8 @@ char master[10][10] ={
         {5,6,7,8,9,0,1,2,3,4}
     };
 
+char log_message[250] = {};
+
 int main(int argc, char *argv[])
 
 /*
@@ -122,7 +124,7 @@ end of run once check
 ======================================================================================================================
 */
 
-char log_message[250] = {};
+
 sprintf(log_message,"================================================");
 log_Function(log_message);
 memset(log_message,0,250);
@@ -159,14 +161,14 @@ if (my_serial.good() )
           my_serial.SetFlowControl(SerialStreamBuf::FLOW_CONTROL_NONE);
           my_serial.SetParity(SerialStreamBuf::PARITY_NONE);
           my_serial.SetNumOfStopBits(1);
-          printf("Serial Port Connected\n");
+          //printf("Serial Port Connected\n");
           sprintf(log_message,"Connected to Serial Port");
           log_Function(log_message);
           memset(log_message,0,250);
          }
 if (! my_serial.good())
 {
-	printf("Serial Port Not Found !\n");
+	//printf("Serial Port Not Found !\n");
 	sprintf(log_message,"Serial Port NOT FOUND !");
 	log_Function(log_message);
 	memset(log_message,0,250);
@@ -226,7 +228,10 @@ string GetResponse()
 
 
     int len=strlen(input_buffer);
-    printf("Rcvd: %s --%d chars, last char: %02X\n",input_buffer,len,next_char);
+    //printf("Rcvd: %s --%d chars, last char: %02X\n",input_buffer,len,next_char);
+    memset(log_message,0,250);
+    sprintf(log_message,"Rcvd: %s --%d chars, last char: %02X",input_buffer,len,next_char);
+    log_Function(log_message);
     return string(input_buffer);
 
 }
@@ -286,7 +291,10 @@ int LockLock(void)
     char send_char='D';
     SendChar(send_char);
     resp=GetResponse();
-    printf("RESP: %s\n",resp.c_str() );
+    //printf("RESP: %s\n",resp.c_str() );
+    memset(log_message,0,250);
+    sprintf(log_message,"Response From Lock %s",resp.c_str());
+    log_Function(log_message);
     return 1;
 
 
@@ -306,31 +314,54 @@ int UnlockLock(void)
     string key;
     string snd;
 
-    printf("\nUnlocking the lock");
+    //printf("\nUnlocking the lock");
+    memset(log_message,0,250);
+    sprintf(log_message,"Unlock Command Sent to Lock...",resp.c_str());
+    log_Function(log_message);
+
+
     send_char='k';
-    printf("\nSending %c\n",send_char);
+    //printf("\nSending %c\n",send_char);
+    memset(log_message,0,250);
+    sprintf(log_message,"Sending %c",send_char);
+    log_Function(log_message);
+
     SendChar(send_char);
     resp=GetResponse();
 
-    printf("Challenge Key: %s\n",  resp.c_str());   //Challenge Key: OK 5715393577;
+    //printf("Challenge Key: %s\n",  resp.c_str());   //Challenge Key: OK 5715393577;
+    memset(log_message,0,250);
+    sprintf(log_message,"Challenge Key: %s",resp.c_str());
+    log_Function(log_message);
 
 /*
         use this section only of the challenge key packet
         |--------|
     "OK 9036540674;"
 */
-    printf("Generating response key\n");
-    key = genkey(resp.substr(3));
-    printf("Response key: %s\n",key.c_str());
+    //printf("Generating response key\n");
+    memset(log_message,0,250);
+    sprintf(log_message,"Generating response key... %s",resp.c_str());
+    log_Function(log_message);
 
+    key = genkey(resp.substr(3));
+    //printf("Response key: %s\n",key.c_str());
+    memset(log_message,0,250);
+    sprintf(log_message,"Response Key: %s",key.c_str());
+    log_Function(log_message);
 
     snd = "E " +unlock_time+" "+ key +";";
-    printf("Sending:%s\n", snd.c_str() );
+    //printf("Sending:%s\n", snd.c_str() );
+    memset(log_message,0,250);
+    sprintf(log_message,"Sending: %s",snd.c_str());
+    log_Function(log_message);
     SendString(snd);
     mssleep(50);
     resp = GetResponse();
-    printf("Resp: %s\n", resp.c_str() );
-
+    //printf("Resp: %s\n", resp.c_str() );
+    memset(log_message,0,250);
+    sprintf(log_message,"Response From Lock %s",resp.c_str());
+    log_Function(log_message);
 
 	return 0;
 }
@@ -355,7 +386,14 @@ string genkey(string challenge)
         // strip the ";" off the end
         if (challenge.size () > 0)  challenge.resize (challenge.size () - 1);
 
-        printf("Challenge: %s[%d]\n",challenge.c_str(), (int) challenge.size() );
+        //printf("Challenge: %s[%d]\n",challenge.c_str(), (int) challenge.size() );
+        memset(log_message,0,250);
+        sprintf(log_message,"Challenge %s[%d]",challenge.c_str(), (int) challenge.size());
+        log_Function(log_message);
+
+
+
+
         // convert string to byte array
         char salt[12];
         bzero(salt,12);
