@@ -206,10 +206,6 @@ while(1) //Service so endless loop
 //Process command
 //-------------------------------------------------------------------------------------------------------------------
 	 processcommand();
-
-
-
-
 	 memset(MessageFromSocket,0,1024); //Clear message from Socket
 }
 /*
