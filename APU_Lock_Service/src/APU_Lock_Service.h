@@ -23,7 +23,7 @@
 #include <cstdint>
 #include <bits/stdc++.h>    // for strcpy
 #include <array>            // for array copy
-
+#include <iostream>
 
 using namespace std;
 /*
@@ -44,6 +44,7 @@ char* rot(char b[], char seed);
 int UnlockLock(void);
 void domain_socket_server(void);
 void processcommand(void);
+void getLockDoorSensors(void);
 /*
 =========================================================================================================
 End Of Available Functions

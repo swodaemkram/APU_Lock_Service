@@ -34,10 +34,7 @@ element 1 = lock        1=lock open
 element 2 = door
 ====================================================================================================================
 */
-
-#include <iostream>
 #include "APU_Lock_Service.h"
-
 
 using namespace std;
 using namespace LibSerial;
@@ -66,7 +63,7 @@ char master[10][10] ={
     };
 
 char log_message[250] = {};
-
+string sensor_status;
 int main(int argc, char *argv[])
 
 /*
@@ -467,9 +464,33 @@ char* rot(char b[], char seed)
 =========================================================================================================================
 End rot Function
 =========================================================================================================================
+Get door sensor status
+=========================================================================================================================
 */
 
+void getLockDoorSensors(void)
+{
+    // get sensors
 
+	int lock_sensor, door_sensor;
+    char send_char = 'r';
+
+
+    printf("Sending: %c\n",send_char);
+    SendChar(send_char);
+    sensor_status = GetResponse();
+
+    //lock_sensor = (int) sensor_status[3] - 0x30;
+    //door_sensor = (int) sensor_status[5] - 0x30;
+
+    printf("Response from Lock was %s",sensor_status.c_str());
+    return ;
+}
+/*
+=========================================================================================================================
+End Get door sensor status
+=========================================================================================================================
+*/
 
 
 

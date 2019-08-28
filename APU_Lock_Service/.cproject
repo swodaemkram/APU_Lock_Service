@@ -65,7 +65,7 @@
                                 								
                                 <option id="gnu.c.compiler.option.dialect.std.256452204" name="Language standard" superClass="gnu.c.compiler.option.dialect.std" useByScannerDiscovery="true" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
                                 								
-                                <option id="gnu.c.compiler.option.pthread.767295529" superClass="gnu.c.compiler.option.pthread" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+                                <option id="gnu.c.compiler.option.pthread.767295529" name="Support for pthread (-pthread)" superClass="gnu.c.compiler.option.pthread" useByScannerDiscovery="false" value="true" valueType="boolean"/>
                                 								
                                 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1549512758" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
                                 							
@@ -83,7 +83,7 @@
                                     								
                                 </option>
                                 								
-                                <option id="gnu.cpp.link.option.pthread.1592741072" superClass="gnu.cpp.link.option.pthread" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+                                <option id="gnu.cpp.link.option.pthread.1592741072" name="Support for pthread (-pthread)" superClass="gnu.cpp.link.option.pthread" useByScannerDiscovery="false" value="true" valueType="boolean"/>
                                 								
                                 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.126815027" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
                                     									
