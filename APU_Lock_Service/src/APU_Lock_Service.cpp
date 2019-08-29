@@ -202,7 +202,10 @@ while(1) //Service so endless loop
 //-------------------------------------------------------------------------------------------------------------------
 //Process command
 //-------------------------------------------------------------------------------------------------------------------
-	 processcommand();
+	 //processcommand();
+
+
+
 	 memset(MessageFromSocket,0,1024); //Clear message from Socket
 }
 /*
@@ -222,7 +225,7 @@ Get Response
 =======================================================================================================================
 */
 
-string GetResponse()
+string GetResponse(void)
 {
 
 #define BUFFER_SIZE 150
@@ -483,7 +486,7 @@ void getLockDoorSensors(void)
     //lock_sensor = (int) sensor_status[3] - 0x30;
     //door_sensor = (int) sensor_status[5] - 0x30;
 
-    printf("Response from Lock was %s",sensor_status.c_str());
+    printf("Response from Lock was %s\n",sensor_status.c_str());
     return ;
 }
 /*

@@ -21,9 +21,11 @@ using namespace std;
 
 extern int procnumber;
 extern string sensor_status;
-char APU_Lock_sock_name[250] = {0};
+char APU_Lock_sock_name[250]= {};
 
 void log_Function(char *log_message);
+string GetResponse(void);
+void processcommand(void);
 
 bool Socket_Initialized = false;
 char MessageFromSocket[1024] = "";
@@ -58,30 +60,36 @@ void domain_socket_server (void)
 		return;
 	}
 
+
 Socket_Initialized = true;
 return;
 
+//------------------------------------------Socket Ready for connection ----------------------------------------
+//------------------------------------------Received Connection ------------------------------------------------
 RXNOW:
 
 	//printf("msgsock = %d\n",msgsock);//debug
     bzero(buf, sizeof(buf));      //Zero out buffer
     rval = read(msgsock, buf, 1024); //Read from the socket
-
     if(rval > 0 )
 	{
-
 	char log_message[250];
     memset(log_message,0,250);
 	sprintf(log_message,"client connected to send command");
 	log_Function(log_message);
 	strcpy(MessageFromSocket,buf);
 	memset(buf,0,1025);
+	processcommand();
+	int res;
+	res = write(msgsock,sensor_status.c_str(),7);
+	sensor_status = "";
 	Socket_Initialized = false;
-
+	return;
 	}
 
-    return;
 
+return;
+//------------------------------------------End of Connection---------------------------------------------
 
 }
 

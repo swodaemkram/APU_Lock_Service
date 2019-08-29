@@ -54,9 +54,7 @@ Global Variables
 */
 char comm_port[250]; //Comm Port passed by command line
 char pid_loc_file_name[250];
-char APULock_command_sock_name[250];
 char APULock_command_file_name[250];
-char APULock_response_sock_name[250];
 int procnumber;
 /*
 =========================================================================================================
