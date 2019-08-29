@@ -45,7 +45,6 @@ SerialStream my_serial;
 #define KEY "7578649673"
 
 extern char MessageFromSocket[1024];
-extern bool Socket_Initialized;
 
 string unlock_time="10";      // lock open time in seconds
 
@@ -191,22 +190,18 @@ while(1) //Service so endless loop
 //-------------------------------------------------------------------------------------------------------------------
 //Listen for commands
 //-------------------------------------------------------------------------------------------------------------------
+/*
 	if(strlen(MessageFromSocket) != 0)
 	{
-		printf("message from Domain socket = %s\n",MessageFromSocket);
+		//printf("message from Domain socket = %s\n",MessageFromSocket);//DEBUG
 		sprintf(log_message,"Command %s was Received By APU_Lock Service instance %d",MessageFromSocket,procnumber);
 		log_Function(log_message);
 	}
+*/
 //-------------------------------------------------------------------------------------------------------------------
 //End of Listen for commands
 //-------------------------------------------------------------------------------------------------------------------
-//Process command
-//-------------------------------------------------------------------------------------------------------------------
-	 //processcommand();
-
-
-
-	 memset(MessageFromSocket,0,1024); //Clear message from Socket
+	  memset(MessageFromSocket,0,1024); //Clear message from Socket
 }
 /*
 ======================================================================================================================
@@ -242,12 +237,10 @@ string GetResponse(void)
         mssleep(2);
     }
 
-
-
     int len=strlen(input_buffer);
     //printf("Rcvd: %s --%d chars, last char: %02X\n",input_buffer,len,next_char);
     memset(log_message,0,250);
-    sprintf(log_message,"Rcvd: %s --%d chars, last char: %02X",input_buffer,len,next_char);
+    sprintf(log_message,"Response was: %s chars",input_buffer);
     log_Function(log_message);
     return string(input_buffer);
 
@@ -479,14 +472,14 @@ void getLockDoorSensors(void)
     char send_char = 'r';
 
 
-    printf("Sending: %c\n",send_char);
+    //printf("Sending: %c\n",send_char);//DEBUG
     SendChar(send_char);
     sensor_status = GetResponse();
 
     //lock_sensor = (int) sensor_status[3] - 0x30;
     //door_sensor = (int) sensor_status[5] - 0x30;
 
-    printf("Response from Lock was %s\n",sensor_status.c_str());
+    //printf("Response from Lock was %s\n",sensor_status.c_str());//DEBUG
     return ;
 }
 /*

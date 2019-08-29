@@ -24,7 +24,6 @@ extern string sensor_status;
 char APU_Lock_sock_name[250]= {};
 
 void log_Function(char *log_message);
-string GetResponse(void);
 void processcommand(void);
 
 bool Socket_Initialized = false;
@@ -75,13 +74,24 @@ RXNOW:
 	{
 	char log_message[250];
     memset(log_message,0,250);
-	sprintf(log_message,"client connected to send command");
+	sprintf(log_message,"client connected.....");
 	log_Function(log_message);
 	strcpy(MessageFromSocket,buf);
 	memset(buf,0,1025);
+	if(strlen(MessageFromSocket) != 0)
+		{
+			//printf("message from Domain socket = %s\n",MessageFromSocket);//DEBUG
+			sprintf(log_message,"Command %s was Received By APU_Lock Service instance %d",MessageFromSocket,procnumber);
+			log_Function(log_message);
+		}
 	processcommand();
-	int res;
-	res = write(msgsock,sensor_status.c_str(),7);
+
+	if (sensor_status.size() <= 0)
+			{
+				sensor_status = "ok";
+			}
+
+	write(msgsock,sensor_status.c_str(),7);
 	sensor_status = "";
 	Socket_Initialized = false;
 	return;
