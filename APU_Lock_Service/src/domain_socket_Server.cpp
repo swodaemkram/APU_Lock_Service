@@ -94,9 +94,9 @@ RXNOW:
 	write(msgsock,sensor_status.c_str(),7);
 	sensor_status = "";
 	Socket_Initialized = false;
-	close(msgsock);//TESTING
-	close(sock);//TESTING
-	unlink(APU_Lock_sock_name);//TESTING
+	close(msgsock);
+	close(sock);
+	unlink(APU_Lock_sock_name);
 	return;
 	}
 
