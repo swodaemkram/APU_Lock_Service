@@ -68,8 +68,11 @@ return;
 RXNOW:
 
 	//printf("msgsock = %d\n",msgsock);//debug
-    bzero(buf, sizeof(buf));      //Zero out buffer
+    //bzero(buf, sizeof(buf));      //Zero out buffer
+
+    memset(buf,0,1024);
     rval = read(msgsock, buf, 1024); //Read from the socket
+    printf("rval = %d\n",rval);
     if(rval > 0 )
 	{
 	char log_message[250];
