@@ -48,8 +48,8 @@ void domain_socket_server (void)
 	bind(sock, (struct sockaddr *) &server, sizeof(struct sockaddr_un)); //Bind Socket
 
     listen(sock, 1); //Listen to socket
-    //usleep(100000);  //This delay is critical for the operation of the network client
-	usleep(50000);
+    usleep(1000000);  //This delay is critical for the operation of the network client
+
     msgsock = accept(sock, 0, 0); //Accept connection from anyone
     printf("msgsock = %d\n",msgsock);//MARK DEBUG
 	if (msgsock == -1)
