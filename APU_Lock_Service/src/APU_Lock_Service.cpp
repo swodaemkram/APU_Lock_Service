@@ -44,7 +44,7 @@ SerialStream my_serial;
 #define CODE_LENGTH     10
 #define KEY "7578649673"
 
-extern char MessageFromSocket[1025];
+extern char MessageFromSocket[1024];
 
 string unlock_time="10";      // lock open time in seconds
 

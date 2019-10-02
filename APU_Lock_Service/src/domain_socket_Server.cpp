@@ -77,7 +77,7 @@ RXNOW:
 	sprintf(log_message,"client connected.....");
 	log_Function(log_message);
 	strcpy(MessageFromSocket,buf);
-	memset(buf,0,1025);
+	memset(buf,0,1024);
 	if(strlen(MessageFromSocket) != 0)
 		{
 			//printf("message from Domain socket = %s\n",MessageFromSocket);//DEBUG
