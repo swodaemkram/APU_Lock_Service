@@ -1,7 +1,7 @@
 //=================================================================================================================
 // Name        : APU_Lock_Service.cpp
 // Author      : Mark Meadows
-// Version     : 00:00:03
+// Version     : 00:01:03
 // Copyright   : Copyright (c) 2019 Mark Meadows
 // Description : APU_Lock_Driver_Service in C++, Ansi-style
 //================================================================================================================
@@ -44,7 +44,7 @@ SerialStream my_serial;
 #define CODE_LENGTH     10
 #define KEY "7578649673"
 
-extern char MessageFromSocket[1024];
+extern char MessageFromSocket[1025];
 
 string unlock_time="10";      // lock open time in seconds
 
