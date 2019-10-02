@@ -48,9 +48,10 @@ void domain_socket_server (void)
 	bind(sock, (struct sockaddr *) &server, sizeof(struct sockaddr_un)); //Bind Socket
 
     listen(sock, 1); //Listen to socket
-    usleep(100000);  //This delay is critical for the operation of the network client
-	msgsock = accept(sock, 0, 0); //Accept connection from anyone
-    printf("msgsock = %d\n",msgsock);
+    //usleep(100000);  //This delay is critical for the operation of the network client
+	usleep(50000);
+    msgsock = accept(sock, 0, 0); //Accept connection from anyone
+    printf("msgsock = %d\n",msgsock);//MARK DEBUG
 	if (msgsock == -1)
 	{
 		close(msgsock);
@@ -72,7 +73,7 @@ RXNOW:
 
     memset(buf,0,1024);
     rval = read(msgsock, buf, 1024); //Read from the socket
-    printf("rval = %d\n",rval);
+    printf("rval = %d\n",rval);//MARK DEBUG
     if(rval > 0 )
 	{
 	char log_message[250];
