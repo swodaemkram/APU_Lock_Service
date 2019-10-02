@@ -50,7 +50,7 @@ void domain_socket_server (void)
     listen(sock, 1); //Listen to socket
     usleep(100000);  //This delay is critical for the operation of the network client
 	msgsock = accept(sock, 0, 0); //Accept connection from anyone
-
+    printf("msgsock = %d\n",msgsock);
 	if (msgsock == -1)
 	{
 		close(msgsock);
